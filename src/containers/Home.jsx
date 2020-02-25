@@ -34,6 +34,17 @@ const Home = () => {
     }
   }
 
+  const handleLikes = async (post) => {
+    const hasBeenLiked = !post.hasBeenLiked;
+    const likes = hasBeenLiked ? post.likes + 1 : post.likes - 1;
+    const config = {
+      method: 'put',
+      url:`http://localhost:3000/api/posts/${post.id}`,
+      data: {hasBeenLiked, likes}
+    };
+    const res = await axios(config);
+    getPosts();
+  }
 
   const getPosts = async () => {
     const config = {
@@ -50,7 +61,9 @@ const Home = () => {
       userImage,
       postImage: image,
       caption,
-      filter
+      filter,
+      hasBeenLiked: false,
+      likes: 0,
     }
     const res = savePost(post);
     setStep(1);
@@ -76,6 +89,7 @@ const Home = () => {
         image={image}
         setFilter={setFilter}
         setCaption={setCaption}
+        handleLikes={handleLikes}
       />
       <Footer
         handleGoHome={handleGoHome} 

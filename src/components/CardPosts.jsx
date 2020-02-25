@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CardPosts = ({post}) => (
+const CardPosts = ({post, handleLikes}) => (
   <>
     <div>
       <img src={post.userImage} alt={post.username}/>
@@ -9,7 +9,7 @@ const CardPosts = ({post}) => (
     <div>
       <img src={post.postImage} alt=""/>
       <div>
-        <button>
+        <button onClick={() => handleLikes(post)}> 
           <i className="far fa-heart fa-lg"></i>
         </button>
         <p>{post.likes}</p>
