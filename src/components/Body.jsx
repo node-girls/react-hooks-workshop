@@ -5,7 +5,6 @@ import filters from '../data/filters';
 
 const Body = ({step, posts, image, setFilter, setCaption, handleLikes}) => (
   <>
-  <h2>Body in step {step}</h2>
   { step === 1 
     && posts.map((post, index) => <CardPosts key={post.id} post={post} handleLikes={handleLikes}/>)}
   { step === 2
