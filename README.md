@@ -1,68 +1,388 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Taller IG con React NodeGirlsMadrid 29F
+Bienvenidas!!!!
 
-## Available Scripts
+> 👉 Las slides de la primera parte [las puedes ver aquí](https://slides.com/yunevk/taller-react-nodegirls/live#/).
 
-In the project directory, you can run:
+## ¿Qué vamos a hacer?
+Vamos a hacer una app basada (siempre basada, nunca copiada...) en instagram. Así podremos ver las fotos de nuestras compis de taller y presumir de las cosas molonas que estamos haciendo.
 
-### `npm start`
+La pinta que esperamos que tenga es esta:
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+***************Vídeo????
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Con las slides como fondo ya os hemos contado los principales aspectos técnicos de React. Como siempre, la mejor forma de quedarnos con ellos es embarrarnos y cacharrear, así que allá vamos.
 
-### `npm test`
+## ¿Qué pasos vamos a serguir?
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Montaremos el proyecto.
+2. Haremos un poco de __arquitectura__ básica con los componentes fundamentales.
+3. Les daremos un poco de vidilla sencilla para empezar, ¿cómo?
+  * seteando nuestra variable de estado
+  * modificando esta variable de estado con __funciones de primer orden__ (no asustarse todavía, nos hacen el favor ;P);
+< :warning: A partir de aquí viene la caña, pero os lo vamos a contar suuuuper bien, así que __nonti preocupare__ (o como se diga).
+4. Mostraremos los post que están almacenados en el super back que nos ha montado Irene. Aquí van a entrar en juego unos cuantos conceptos y técnicas interesantes como:
+  * Llamada a la api.
+  * El hook useEffect.
+  * Renderizado condicional.
+  * Mapeo de arrays para generar elementos html.
+5. Cargaremos la imagen que queramos subir.
+6. Mostraremos los filtros aplicados a nuestra imagen para poder elegir el que más nos favorece.
+7. Con un elemento `textarea` habilitaremos la opción de subir un comentario a lo Paulo Cohello.
+8. Cunado ya tengamos todos los datos que compongan cada elemento post, lo subiremos a la base de datos.
+9. Por último, veremos como manejar los likes y dislikes (por si le damos sin querer me gusta a la foto de ese petardo que nos cae fatal).
 
-### `npm run build`
+## Inicializar el proyecto
+1. Instala `create-react-app` con el comando `npx install -g create-react-app`.
+2. Inicializa el proyecto con el comando: `npm create-react-app ig-ngm`.
+3. Cambia a la capeta que contiene el código y abre tu IDE.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+> :warning: **¿Tienes algún problema con Git/Node y no puedes seguir estos pasos?** ¡No te preocupes! Hemos creado este repo de [Codesandbox](https://codesandbox.io/s/create-react-app-0q9nn?fontsize=14) para que no te pierdas nada del taller. Así puedes seguirlo, y cuando termine vemos cómo podemos arreglar esos problemas. :wink:
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Arquitectura del proyecto
+Como vemos `create-react-app` nos ha creado una estructura básica del proyecto. La magia la vamos a hacer dentro de la capeta `src` y vamos a dividir nuestro código entre los componentes de UI o _dummies_ y los compoenents que se responsabilizan de las 
+acciones o _containers_.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+En nuestro caso, solo tendremos un componente _container_ que le vamos a llama `Home.jsx` y el resto serán componentes de UI. 
 
-### `npm run eject`
+Como primer paso, vamos a crear la estructura de carpetas que necesitaremos:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+src/
+  components/
+    Body.jsx
+    Footer.jsx
+    Header.jsx
+  containers/
+    Home.jsx
+```
+## Montando los componentes básicos: Header, Body y Footer
+Vamos a tener tres componentes básicos en nuestra página (a parte de dos más que nos permitirán tener el código separado por responsabilidades independientes). Estos son:
+* **Header**
+* **Body** (que va a ser la parte principal de la aplicación)
+* **Footer**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Vamos a crear la estructura básica de un componente en React:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```js
+import React from 'react';
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+const Component = () => ({});
 
-## Learn More
+export default Component;
+```
+Este paso lo repetiremos para cada uno de los componentes con sus correspondientes nombres. 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Como inicialmente queremos saber que están ahí, podéis darle un poco de contenido, un `button` un `header` o cualquier cosa que os apetezca. __Any way__, si levantamos la aplicación (por si alguien ha olvidado el comando __menos utilizado__ en la historia: ```npm start```), todavía no vamos a ver nada, __niente__, __nothing de nothing__... y ¿porqueéééééé? pues sencillamente, porque no hay nadie que haga uso de estos componentes. Creemos pues `Home` el elemento __container__ e incluyamos nuestros __dummies__ pero __loved__, components.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```js
+import react from 'React';
+import Header from '../../components/header/Header';
+import Container from '../../components/container/Container';
+import Footer from '../../components/footer/Footer';
 
-### Code Splitting
+const Home = () => {
+  return (
+    <div>
+      <Header/>
+      <Container/>
+      <Footer/>
+    </div>
+  )
+}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+export default Home;
+```
+A su vez, este tendremos que llamarlo desde App para que sea visible: 
 
-### Analyzing the Bundle Size
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```js
+import React from 'react';
+import Home from './containers/home/Home';
+import './App.css';
 
-### Making a Progressive Web App
+function App() {
+  return (
+    <div className="App">
+      <Home></Home>
+    </div>
+  );
+}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+export default App;
+```
 
-### Advanced Configuration
+Ahora sí, ahora levantaremos nuestra aplicación y podremos ver esas __preciosidades__ de componentes en pantalla.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+## Dando contenido a nuestros _dummy components_
+Vamos a ver qué va a hacer cada uno de nuestros componentes y a añadirles el código que necesitan.
 
-### Deployment
+### Header
+Este componente debe permitirnos navegar entre pantallas cuando estemos cargando la imagen y deberá permitirnos cancelar el post. Para ello vamos a incluir condicionalmente cuatro botones que estarán o no estarán dependiendo del paso en el que estemos.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+Y nuestro componente `Header` quedaría así:
 
-### `npm run build` fails to minify
+```js
+import React from 'react';
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+const Header = ({ step}) => {
+  return (
+    <>
+      {step ===1 && <button>Home</button>}
+      {(step === 2 || step === 3) && <button>Cancel</button>}
+      {(step ===1 || step === 2) && <button>Next</button>}
+      {step === 3 && <button>Share</button>}
+    </>
+  );
+};
+
+export default Header;
+```
+donde:
+
+  * `step`: es el paso del flujo de carga de imágenes.
+  * `hadleGoHome`: es la función que nos va a permitir navegar hasta la primera pantalla.
+  * `handleNextStep`: es la función que nos permitirá navegar hasta a siguiente pantalla.
+  * `handleSharePost`: es una función que navegará a home y lanzará la petición post con los datos.
+
+### Footer
+Este es el componente que nos va a permitir subir las imágenes. Para ello, incluiremos un botón que permita navegar a la pantalla de inicio y un input para seleccionar el archivo que queremos subir.
+
+```js
+import React from 'react';
+
+const Footer = ({ step }) => {
+  return (
+    <>
+      <button>Home</button>
+      <input
+        type="file"
+        name="file"
+        id="file"
+        className="file"
+        disabled={step!==1}
+        />
+    </>
+  );
+};
+
+export default Footer;
+```
+Donde `step` y `handleGoHome` son los mismos elementos definidos para el componente `Header`, `handleUploadImage` va ser la función que suba imágenes y el `input` va a estar deshabilitado en cualquier pantalla que no sea la inicial.
+
+### Container
+De momento, inicializaremos este componente e una forma muy básica, simplemente vamos a hacer que nos muestre el paso en el que nos encotramos. Así, `Container` nos queda tal que:
+
+```js
+import React from 'react';
+
+const Container = ({ step }) => {
+  return (
+    <>
+      <h2>Container in step {step} </h2>
+    </>
+  );
+};
+
+export default Container;
+```
+## Step, nuestra primera variable de estado, nuestro primer hook
+
+Vemos que nuestros tres componentes dependen de la variable step que les pasamos como propiedad. Esta propiedad, `step` debe venir y ser manejada en el componente `Home`, pero ¿cómo? ¿como variable de estado? ¿porquéééeéééé motivooooo? :scream:
+
+Bueno, el motivo no es especialmente sencillo, vamos a intentar explicarlo aquí, aunque seguramente, si estás haciendo el taller en vivo la explicación sea mejor. Cuando pasamos una propiedad a un componente hijo, este solo se va a actualizar si forma parte o bien de las propiedades o bien del estado del padre. Cualquier otro tipo de variable dentro del scope del componente padre que mute su valor, no se vería reflejada en el hijo.
+
+Dicho lo cual, veamos cómo se traduce esto en código: necesitamos utilizar el método `useState` de React. Este método nos devuelve un array con dos valores, el primero, el de nuestra variable de estado y el segundo, el de la función que hemos de invocar cada vez que necesitemos mutar dicha variable, en otras palabras: 
+
+```js
+import react, { useState } from 'React';
+import Header from '../../components/header/Header';
+import Container from '../../components/container/Container';
+import Footer from '../../components/footer/Footer';
+
+const Home = () => {
+  const [step, setStep] = useState(1);
+  return (
+    <div>
+      <Header
+        step={step}
+      />
+      <Container
+        step={step}
+      />
+      <Footer
+        step={step}
+      />
+    </div>
+  )
+}
+
+export default Home;
+```
+
+## Funciones como ciudadanos de primera: pasando lógica entre componentes
+Hasta el momento, nuestros componentes `Header` y `Footer`, contienen unos botones estupendísimos y preciosísimos que no hacen ná de ná. Necesitamos darles un poco de vida, pero, sobre todo de lógica. 
+
+> :hand: One minute!!!!! ¿No habíais dicho que `Header`, `Footer` y `Container` eran componentes UI si ninguna lógica? Bingoooo!!!!! :tada: Así es, premio para tí, pequeña padawan por estar atenta. Entonces... ¿Cómo hago para darles ese soplo de vida y espíritu y que esos botones e input sirvan para algo más que para mostrar una interfaz bonita?
+
+Para esos menesteres, vamos a hacer uso de una de las características más molonas de js que es que las funciones son ciudadanos de primera categoría, oiga, nada que envidiarles a sus primos los objetos, strings, numbers ni ningún otro. Y si estos últimos, pueden venir como parámetros de una función otra función no va a ser menos. Así, nuestros _dummy components_ quedarían:
+
+```js
+const Header = ({ handleGoHome, handleShare, handleNext, step}) => {
+  return (
+    <>
+      {step ===1 && <button onClikc={handleGoHome}>Home</button>}
+      {(step === 2 || step === 3) && <button onClick={handleGoHome}>Cancel</button>}
+      {(step ===1 || step === 2) && <button onClick={handleNext}>Next</button>}
+      {step === 3 && <button onClick={handleShare}>Share</button>}
+    </>
+  );
+};
+```
+
+```js
+const Footer = ({ handleGoHome, handleUploadImage, step }) => {
+  return (
+    <>
+      <button onClick={handleGoHome}>Home</button>
+      <input
+        type="file"
+        name="file"
+        id="file"
+        className="file"
+        disabled={step!==1}
+        onChange={handleUploadImage}/>
+    </>
+  );
+};
+```
+
+Por supuesto, estas funciones habrán de venir definidas en algún lado. La lógica la definimos dentro de los _containers_. Nosotras, hoy solo tenemos un _container_, `Home`, en el que definiremos lo que queremos que haga cada una de estas funciones:
+
+```js
+import react, { useState } from 'React';
+import Header from '../../components/header/Header';
+import Container from '../../components/container/Container';
+import Footer from '../../components/footer/Footer';
+
+const Home = () => {
+  const [step, setStep] = useState(1);
+  const handleGoHome = () => setState(1);
+  const handleNext = () => setState(step + 1);
+  const handleShare = () => {};
+  const handleUploadImage = () => {};
+  return (
+    <div>
+      <Header
+        step={step}
+        handleShare={handleShare}
+        handleGoHome={handleGoHome}
+        handleNext={handleNext}
+      />
+      <Container
+        step={step}
+      />
+      <Footer
+        step={step}
+        handleGoHome={handleGoHome}
+        handleUploadImage={handleUploadImage}
+      />
+    </div>
+  )
+}
+
+export default Home;
+```
+
+Hasta el momento, tenemos una app que nos permite navegar entre pantallas, y cambiar la variable de estado `step`. Hemos aprendido varias cositas interesantes, hemos hecho nuestros primero pinitos con _jsx_, con el _state_ de un componente, con los hooks, con sus propiedades... Hemos hecho un montón de cosas pero sinceramente, esa app, hasta aquí no es muy divertida. _Stay with us_, ahora vamos a entrar en la parte con más enjundia del taller!!! :mag:
+
+## Carga inicial de los posts
+
+> :warning: **Warning!!!!** La carga inicial de los posts es un poco compleja!!!! Keep your eyes :eyes: and ears :ear: open!!!
+
+El componente `Container` será el que nos muestre el contenido de los post de nuestro IG. Por ello, como medida inicial lo primero que haremos, será la carga de los mismos.
+
+Posts es una variable que pasaremos como propiedad al componente Container. Puesto que nos interesa que cada vez que `post` varíe su valor, `Container` se actualice, hemos de establecerla como parte del estado de` Home`. Esto lo hacemos de manera análoga a como hacíamos con `step`.
+```js
+const [posts, setPosts] = useState([]); 
+```
+
+Por otra parte hemos de incluir la petición a back. Vamos a separar este proceso en varios pasos:
+1. **instalación del módulo de node axios** que nos va a facilitar realizar y procesar las peticiones: 
+``` npm i -S axios ```
+2. **Importaremos el módulo** axios en `Home`:
+``` import axios from 'axios ```
+3. Queremos que la petición se realice la primera vez que se "monta" nuestro componente, para ello usaremos el _hook_ `useEffect`, al que le pasaremos como dependencia un array vacío. El hecho de que no tenga dependencias, evita que entremos en un bucle infinito:
+```js
+  const getPosts = async () => {
+    const res = await axios.get('http;//localhost:3000/api/posts');
+    setPosts(res.data);
+  } 
+  useEffect(() => {
+    getPosts();
+  }, []);
+```
+Una vez obtenidos los datos, estos se pasarán a `Container` (componente encargado de mostrarlos) como propiedades.
+
+Este es el código de `Home` y de `Container` en este punto del taller: 
+
+* **Home**:
+
+```js
+import react, { useState } from 'React';
+import axios from 'axios';
+import Header from '../../components/Header';
+import Body from '../../components/Body';
+import Footer from '../../components/Footer';
+
+const Home = () => {
+  const [step, setStep] = useState(1);
+  const [posts, setPosts] = useState([]); 
+  const handleGoHome = () => setState(1);
+  const handleNext = () => setState(step + 1);
+  const handleShare = () => {};
+  const handleUploadImage = () => {};
+  const getPosts = async () => {
+    const res = await axios.get('http;//localhost:3000/api/posts');
+    setPosts(res.data);
+  } 
+  useEffect(() => {
+    getPosts();
+  }, []);
+  return (
+    <div>
+      <Header
+        step={step}
+        handleShare={handleShare}
+        handleGoHome={handleGoHome}
+        handleNext={handleNext}
+      />
+      <Body
+        step={step}
+        posts={posts}
+      />
+      <Footer
+        step={step}
+        handleGoHome={handleGoHome}
+        handleUploadImage={handleUploadImage}
+      />
+    </div>
+  )
+}
+
+export default Home;
+```
+* **Body**:
+
+```js
+import React from 'react';
+
+const Body = ({ step, posts }) => {
+  return (
+    <>
+      <h2>Body in step {step} </h2>
+    </>
+  );
+};
+
+export default Body;
+```
