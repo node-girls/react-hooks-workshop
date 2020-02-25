@@ -36,7 +36,10 @@ const Home = () => {
         handleNext={handleNext}
         handleShare={handleShare}  
       />
-      <Body step={step}/>
+      <Body 
+        step={step}
+        posts={posts}  
+      />
       <Footer
         handleGoHome={handleGoHome} 
         step={step}
