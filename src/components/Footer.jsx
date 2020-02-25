@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Footer = ({step}) => (
+const Footer = ({step, handleGoHome}) => (
   <>
-    <button>Home</button>
+    <button onClick={handleGoHome}>Home</button>
     <input 
       name="file"
       id="file"
