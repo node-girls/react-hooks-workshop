@@ -6,9 +6,21 @@ import Footer from '../components/Footer'
 
 const Home = () => {
   const [step, setStep] = useState(1);
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState([]);
+  const [image, setImage] = useState([]);
   const handleGoHome = () => setStep(1);
   const handleNext = () => setStep(step +1);
+  const handleUploadImage = (ev) => {
+    const files = ev.target.files;
+    if(files.length > 0) {
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onload = ev => {
+        setImage(ev.target.result);
+        setStep(2);
+      }
+    }
+  }
   const handleShare = () => {
     setStep(1);
   }
@@ -43,6 +55,7 @@ const Home = () => {
       <Footer
         handleGoHome={handleGoHome} 
         step={step}
+        handleUploadImage={handleUploadImage}
       />
     </>
   );
