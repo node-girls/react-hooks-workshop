@@ -3,13 +3,29 @@ import CardPosts from './CardPosts';
 import CardFilter from './CardFilters';
 import filters from '../data/filters';
 
-const Body = ({step, posts, image, setFilter}) => (
+const Body = ({step, posts, image, setFilter, setCaption}) => (
   <>
   <h2>Body in step {step}</h2>
   { step === 1 
     && posts.map((post, index) => <CardPosts key={post.id} post={post}/>)}
   { step === 2
     && filters.map((filter => <CardFilter key={filter.name} image={image} filter={filter} setFilter={setFilter}/>))}
+  { step === 3
+    &&  
+      <>
+        <div className="selected-image">
+          <img src={image} alt=""/>
+        </div>
+        <div className="caption-containe">
+          <textarea 
+            className="caption-input"
+            type="text"
+            placeholder="Write a caption..."
+            onChange={(ev) => setCaption(ev.target.value)}
+            ></textarea>
+        </div>
+      </>
+    }
   </>
 );
 
