@@ -11,6 +11,15 @@ const Home = () => {
   const [image, setImage] = useState('');
   const [filter, setFilter] = useState('');
   const [caption, setCaption] = useState('');
+  const savePost = async (post) => {
+    const config = {
+      method: 'post',
+      url:'http://localhost:3000/api/posts',
+      data: post
+    };
+    const res = await axios(config);
+    return res;
+  }
   const handleGoHome = () => setStep(1);
   const handleNext = () => setStep(step +1);
   const handleUploadImage = (ev) => {
@@ -24,16 +33,7 @@ const Home = () => {
       }
     }
   }
-  const handleShare = () => {
-    const post = {
-      username: 'nodegirls',
-      userImage,
-      postImage: image,
-      caption,
-      filter
-    }
-    setStep(1);
-  }
+
 
   const getPosts = async () => {
     const config = {
@@ -42,16 +42,24 @@ const Home = () => {
     };
     const res = await axios(config);
     setPosts(res.data);
-    console.log(res.data);
+  }
+
+  const handleShare = () => {
+    const post = {
+      username: 'nodegirls',
+      userImage,
+      postImage: image,
+      caption,
+      filter
+    }
+    const res = savePost(post);
+    setStep(1);
+    setTimeout(() => getPosts());
   }
 
   useEffect(() => {
     getPosts();
   }, []);
-
-  useEffect(() => {
-    console.log(caption);
-  }, [caption])
 
   return(
     <>
