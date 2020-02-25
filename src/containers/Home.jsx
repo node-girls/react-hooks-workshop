@@ -4,7 +4,7 @@ import Body from '../components/Body'
 import Footer from '../components/Footer'
 
 const Home = () => {
-  const [step, setState] = useState(2);
+  const [step, setState] = useState(1);
   return(
     <>
       <h2>Home</h2>
