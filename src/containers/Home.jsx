@@ -7,7 +7,8 @@ import Footer from '../components/Footer'
 const Home = () => {
   const [step, setStep] = useState(1);
   const [posts, setPosts] = useState([]);
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState('');
+  const [filter, setFilter] = useState('');
   const handleGoHome = () => setStep(1);
   const handleNext = () => setStep(step +1);
   const handleUploadImage = (ev) => {
@@ -37,7 +38,11 @@ const Home = () => {
 
   useEffect(() => {
     getPosts();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    console.log(filter);
+  }, [filter])
 
   return(
     <>
@@ -52,6 +57,7 @@ const Home = () => {
         step={step}
         posts={posts}
         image={image}
+        setFilter={setFilter}
       />
       <Footer
         handleGoHome={handleGoHome} 
