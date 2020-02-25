@@ -1,7 +1,15 @@
 import React from 'react';
 
-const Footer = () => (
-  <h2>Header</h2>
+const Footer = ({step}) => (
+  <>
+    <button>Home</button>
+    <input 
+      name="file"
+      id="file"
+      type="file"
+      disabled={step !== 1}
+    />
+  </>
 );
 
 export default Footer;
