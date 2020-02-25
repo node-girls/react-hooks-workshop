@@ -50,7 +50,8 @@ const Home = () => {
       />
       <Body 
         step={step}
-        posts={posts}  
+        posts={posts}
+        image={image}
       />
       <Footer
         handleGoHome={handleGoHome} 
