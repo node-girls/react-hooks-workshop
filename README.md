@@ -27,8 +27,6 @@ Con las slides como fondo ya os hemos contado los principales aspectos técnicos
 
     > :warning: A partir de aquí viene la caña, pero os lo vamos a contar suuuuper bien, así que __nonti preocupare__ (o como se diga).
 
-    
-
 5. Mostraremos los post que están almacenados en el super back que nos ha montado Irene. Aquí van a entrar en juego unos cuantos conceptos y técnicas interesantes como:
   * Llamada a la API.
   * El hook `useEffect`.
@@ -92,6 +90,12 @@ Es decir, vamos a crear una carpeta `img` dentro de `public`. Dentro de esta car
 - [`share.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/share.svg)
 
 > ⚠️ Para no extender más el taller, vamos a tener todo el código CSS en un archivo, pero lo ideal es que el código CSS relativo a cada componente esté en archivos diferentes, y sea cada componente el que importe su archivo CSS. Esta refactorización la puedes hacer después. 😉
+
+Por último, tendremos que añadir los estilos para poder mostrar los filtros, y para eso vamos a usar [CSSGram](https://una.im/CSSgram/). Es muy fácil añadirlo! Solo tienes que incluir la siguiente línea en tu archivo `/public/index.html`, más concretamente dentro de la etiqueta `<head>`.
+
+```
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cssgram/0.1.10/cssgram.min.css">
+```
 
 Ya tenemos nuestro _setup_, así que continuamos con los componentes.
 
