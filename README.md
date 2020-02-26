@@ -15,21 +15,35 @@ Con las slides como fondo ya os hemos contado los principales aspectos técnicos
 ## ¿Qué pasos vamos a serguir?
 
 1. Montaremos el proyecto.
+
 2. Haremos un poco de __arquitectura__ básica con los componentes fundamentales.
-3. Les daremos un poco de vidilla sencilla para empezar, ¿cómo?
+
+3. Añadiremos los estilos e imágenes necesarias para que luzca.
+
+4. Les daremos un poco de vidilla sencilla para empezar, ¿cómo?
   * seteando nuestra variable de estado
+
   * modificando esta variable de estado con __funciones de primer orden__ (no asustarse todavía, nos hacen el favor ;P);
-< :warning: A partir de aquí viene la caña, pero os lo vamos a contar suuuuper bien, así que __nonti preocupare__ (o como se diga).
-4. Mostraremos los post que están almacenados en el super back que nos ha montado Irene. Aquí van a entrar en juego unos cuantos conceptos y técnicas interesantes como:
-  * Llamada a la api.
-  * El hook useEffect.
+
+    > :warning: A partir de aquí viene la caña, pero os lo vamos a contar suuuuper bien, así que __nonti preocupare__ (o como se diga).
+
+    
+
+5. Mostraremos los post que están almacenados en el super back que nos ha montado Irene. Aquí van a entrar en juego unos cuantos conceptos y técnicas interesantes como:
+  * Llamada a la API.
+  * El hook `useEffect`.
   * Renderizado condicional.
   * Mapeo de arrays para generar elementos html.
-5. Cargaremos la imagen que queramos subir.
-6. Mostraremos los filtros aplicados a nuestra imagen para poder elegir el que más nos favorece.
-7. Con un elemento `textarea` habilitaremos la opción de subir un comentario a lo Paulo Cohello.
-8. Cunado ya tengamos todos los datos que compongan cada elemento post, lo subiremos a la base de datos.
-9. Por último, veremos como manejar los likes y dislikes (por si le damos sin querer me gusta a la foto de ese petardo que nos cae fatal).
+
+6. Cargaremos la imagen que queramos subir.
+
+7. Mostraremos los filtros aplicados a nuestra imagen para poder elegir el que más nos favorece.
+
+8. Con un elemento `textarea` habilitaremos la opción de subir un comentario a lo Paulo Cohello.
+
+9. Cuando ya tengamos todos los datos que compongan cada elemento post, lo subiremos a la base de datos.
+
+10. Por último, veremos como manejar los likes y dislikes (por si le damos sin querer me gusta a la foto de ese petardo que nos cae fatal).
 
 ## Inicializar el proyecto
 1. Instala `create-react-app` con el comando `npx install -g create-react-app`.
@@ -55,7 +69,34 @@ src/
   containers/
     Home.jsx
 ```
+## Añadiendo estilos e imágenes
+
+Antes de empezar con la caña, vamos a añadir primero los archivos necesarios para que nuestra aplicación luzca bien.
+
+Hemos preparado este CSS para que lo insertes en `index.css`, con las clases que utilizaremos a continuación. Por eso, solo tienes que acceder a [este enlace](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/src/index.css), copiar el código y pegarlo en tu archivo `index.css`.
+
+No solo vamos a añadir estilos, también tendremos algunos iconos. Recuerda que los archivos estáticos de la aplicación (como las imágenes) las tienes que añadir dentro la carpeta `public` que se ha generado con `create-react-app`. Por eso, necesitamos una estrcutura así:
+
+```
+public/
+  img/
+```
+
+Es decir, vamos a crear una carpeta `img` dentro de `public`. Dentro de esta carpeta añadiremos los siguientes iconos (abre cada enlace para copiar su contenido):
+
+- [`camera.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/camera.svg)
+- [`home.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/home.svg)
+- [`left-arrow.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/left-arrow.svg)
+- [`nodegirls.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/nodegirls.svg)
+- [`right-arrow.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/right-arrow.svg)
+- [`share.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/share.svg)
+
+> ⚠️ Para no extender más el taller, vamos a tener todo el código CSS en un archivo, pero lo ideal es que el código CSS relativo a cada componente esté en archivos diferentes, y sea cada componente el que importe su archivo CSS. Esta refactorización la puedes hacer después. 😉
+
+Ya tenemos nuestro _setup_, así que continuamos con los componentes.
+
 ## Montando los componentes básicos: Header, Body y Footer
+
 Vamos a tener tres componentes básicos en nuestra página (a parte de dos más que nos permitirán tener el código separado por responsabilidades independientes). Estos son:
 * **Header**
 * **Body** (que va a ser la parte principal de la aplicación)
@@ -170,7 +211,7 @@ export default Footer;
 Donde `step` y `handleGoHome` son los mismos elementos definidos para el componente `Header`, `handleUploadImage` va ser la función que suba imágenes y el `input` va a estar deshabilitado en cualquier pantalla que no sea la inicial.
 
 ### Body
-De momento, inicializaremos este componente e una forma muy básica, simplemente vamos a hacer que nos muestre el paso en el que nos encotramos. Así, `Body` nos queda tal que:
+De momento, inicializaremos este componente de una forma muy básica, simplemente vamos a hacer que nos muestre el paso en el que nos encotramos. Así, `Body` nos queda tal que:
 
 ```js
 import React from 'react';
@@ -399,7 +440,7 @@ Vamos a hacer un componente específico para la visualización de los posts. Cad
   hasBeenLiked,
   likes
 }
- ```
+```
 
 así que contando con la info que queremos mostrar, nuestro compoente CardPost, tendrá esta pinta en código:
 
