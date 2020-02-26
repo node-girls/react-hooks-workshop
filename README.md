@@ -409,15 +409,34 @@ import React from 'react';
 const CardPost = ({post}) => {
   return (
     <article>
-      <div className="user-info">
-      </div>
+    <div>
+      <img src={post.userImage} alt={post.username}/>
+      <p>{post.username}</p>
+    </div>
+    <div>
+      <img src={post.postImage} alt=""/>
       <div>
+        <button onClick={() => handleLikes(post)}> 
+          <i className="far fa-heart fa-lg"></i>
+        </button>
+        <p>{post.likes}</p>
+        <p>{post.caption}</p>
+      </div>
+    </div>
     </article>
   )
 }
 ```
+Ahora vamos a ver un poquito de la magia de react (bueno, después de los hooks, que los hooks molan mucho): por una parte vamos a hacer un renderizado condicional, ya que solo queremos mostrar los posts en caso de estar en el step uno y además vamos a hacer una cosa muy fncional y molona: generar html a partir del mapeo de un array de javascript. Esta maravilla de la naturaleza y del código, se hace introduciendo estas líneas en nuestro componente body
 
-Holaa
+```js
+  { step === 1 
+    && posts.map((post, index) => <CardPosts key={post.id} post={post}/>)}
+```
+No olvidéis que:
+1. Body debe importar CardPost o no podrá utilizarlo.
+2. El array de posts, le tiene que ser pasado a Body como prop.
+
 ## Subida del post: recogiendo la info
 
 ### Subida de la imagen
