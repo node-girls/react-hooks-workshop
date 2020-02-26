@@ -344,6 +344,16 @@ Hasta el momento, tenemos una app que nos permite navegar entre pantallas, y cam
 
 > :warning: **Warning!!!!** La carga inicial de los posts es un poco compleja!!!! Keep your eyes :eyes: and ears :ear: open!!!
 
+Antes de empezar con la carga inicial de los posts, tenemos que levantar un servidor con una API para poder conectarnos a ella, pero que no cunda el pánico!! Irene se ha currado una API muy fácil de usar para que no nos tengamos que preocupar para nada del back. ;)
+
+Así que, en otra instancia de la consola, solo tenemos que ejecutar el siguiente comando:
+
+```
+npx github:IrenePEncinar/express-instagram
+```
+
+Y así podremos acceder desde `localhost:3000`! Volvamos ahora a nuestra aplicación para conectarnos.
+
 El componente `Body` será el que nos muestre el contenido de los post de nuestro IG. Por ello, como medida inicial lo primero que haremos, será la carga de los mismos.
 
 Posts es una variable que pasaremos como propiedad al componente Body. Puesto que nos interesa que cada vez que `post` varíe su valor, `Body` se actualice, hemos de establecerla como parte del estado de` Home`. Esto lo hacemos de manera análoga a como hacíamos con `step`.
