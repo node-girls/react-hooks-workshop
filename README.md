@@ -72,19 +72,19 @@ export default Component;
 ```
 Este paso lo repetiremos para cada uno de los componentes con sus correspondientes nombres. 
 
-Como inicialmente queremos saber que están ahí, podéis darle un poco de contenido, un `button` un `header` o cualquier cosa que os apetezca. __Any way__, si levantamos la aplicación (por si alguien ha olvidado el comando __menos utilizado__ en la historia: ```npm start```), todavía no vamos a ver nada, __niente__, __nothing de nothing__... y ¿porqueéééééé? pues sencillamente, porque no hay nadie que haga uso de estos componentes. Creemos pues `Home` el elemento __container__ e incluyamos nuestros __dummies__ pero __loved__, components.
+Como inicialmente queremos saber que están ahí, podéis darle un poco de contenido, un `button` un `header` o cualquier cosa que os apetezca. __Any way__, si levantamos la aplicación (por si alguien ha olvidado el comando __menos utilizado__ en la historia: ```npm start```), todavía no vamos a ver nada, __niente__, __nothing de nothing__... y ¿porqueéééééé? pues sencillamente, porque no hay nadie que haga uso de estos componentes. Creemos pues `Home` el elemento __Body__ e incluyamos nuestros __dummies__ pero __loved__, components.
 
 ```js
 import react from 'React';
 import Header from '../../components/header/Header';
-import Container from '../../components/container/Container';
+import Body from '../../components/Body/Body';
 import Footer from '../../components/footer/Footer';
 
 const Home = () => {
   return (
     <div>
       <Header/>
-      <Container/>
+      <Body/>
       <Footer/>
     </div>
   )
@@ -169,21 +169,21 @@ export default Footer;
 ```
 Donde `step` y `handleGoHome` son los mismos elementos definidos para el componente `Header`, `handleUploadImage` va ser la función que suba imágenes y el `input` va a estar deshabilitado en cualquier pantalla que no sea la inicial.
 
-### Container
-De momento, inicializaremos este componente e una forma muy básica, simplemente vamos a hacer que nos muestre el paso en el que nos encotramos. Así, `Container` nos queda tal que:
+### Body
+De momento, inicializaremos este componente e una forma muy básica, simplemente vamos a hacer que nos muestre el paso en el que nos encotramos. Así, `Body` nos queda tal que:
 
 ```js
 import React from 'react';
 
-const Container = ({ step }) => {
+const Body = ({ step }) => {
   return (
     <>
-      <h2>Container in step {step} </h2>
+      <h2>Body in step {step} </h2>
     </>
   );
 };
 
-export default Container;
+export default Body;
 ```
 ## Step, nuestra primera variable de estado, nuestro primer hook
 
@@ -196,7 +196,7 @@ Dicho lo cual, veamos cómo se traduce esto en código: necesitamos utilizar el 
 ```js
 import react, { useState } from 'React';
 import Header from '../../components/header/Header';
-import Container from '../../components/container/Container';
+import Body from '../../components/Body/Body';
 import Footer from '../../components/footer/Footer';
 
 const Home = () => {
@@ -206,7 +206,7 @@ const Home = () => {
       <Header
         step={step}
       />
-      <Container
+      <Body
         step={step}
       />
       <Footer
@@ -222,7 +222,7 @@ export default Home;
 ## Funciones como ciudadanos de primera: pasando lógica entre componentes
 Hasta el momento, nuestros componentes `Header` y `Footer`, contienen unos botones estupendísimos y preciosísimos que no hacen ná de ná. Necesitamos darles un poco de vida, pero, sobre todo de lógica. 
 
-> :hand: One minute!!!!! ¿No habíais dicho que `Header`, `Footer` y `Container` eran componentes UI si ninguna lógica? Bingoooo!!!!! :tada: Así es, premio para tí, pequeña padawan por estar atenta. Entonces... ¿Cómo hago para darles ese soplo de vida y espíritu y que esos botones e input sirvan para algo más que para mostrar una interfaz bonita?
+> :hand: One minute!!!!! ¿No habíais dicho que `Header`, `Footer` y `Body` eran componentes UI si ninguna lógica? Bingoooo!!!!! :tada: Así es, premio para tí, pequeña padawan por estar atenta. Entonces... ¿Cómo hago para darles ese soplo de vida y espíritu y que esos botones e input sirvan para algo más que para mostrar una interfaz bonita?
 
 Para esos menesteres, vamos a hacer uso de una de las características más molonas de js que es que las funciones son ciudadanos de primera categoría, oiga, nada que envidiarles a sus primos los objetos, strings, numbers ni ningún otro. Y si estos últimos, pueden venir como parámetros de una función otra función no va a ser menos. Así, nuestros _dummy components_ quedarían:
 
@@ -261,7 +261,7 @@ Por supuesto, estas funciones habrán de venir definidas en algún lado. La lóg
 ```js
 import react, { useState } from 'React';
 import Header from '../../components/header/Header';
-import Container from '../../components/container/Container';
+import Body from '../../components/Body/Body';
 import Footer from '../../components/footer/Footer';
 
 const Home = () => {
@@ -278,7 +278,7 @@ const Home = () => {
         handleGoHome={handleGoHome}
         handleNext={handleNext}
       />
-      <Container
+      <Body
         step={step}
       />
       <Footer
@@ -299,9 +299,9 @@ Hasta el momento, tenemos una app que nos permite navegar entre pantallas, y cam
 
 > :warning: **Warning!!!!** La carga inicial de los posts es un poco compleja!!!! Keep your eyes :eyes: and ears :ear: open!!!
 
-El componente `Container` será el que nos muestre el contenido de los post de nuestro IG. Por ello, como medida inicial lo primero que haremos, será la carga de los mismos.
+El componente `Body` será el que nos muestre el contenido de los post de nuestro IG. Por ello, como medida inicial lo primero que haremos, será la carga de los mismos.
 
-Posts es una variable que pasaremos como propiedad al componente Container. Puesto que nos interesa que cada vez que `post` varíe su valor, `Container` se actualice, hemos de establecerla como parte del estado de` Home`. Esto lo hacemos de manera análoga a como hacíamos con `step`.
+Posts es una variable que pasaremos como propiedad al componente Body. Puesto que nos interesa que cada vez que `post` varíe su valor, `Body` se actualice, hemos de establecerla como parte del estado de` Home`. Esto lo hacemos de manera análoga a como hacíamos con `step`.
 ```js
 const [posts, setPosts] = useState([]); 
 ```
@@ -321,9 +321,9 @@ Por otra parte hemos de incluir la petición a back. Vamos a separar este proces
     getPosts();
   }, []);
 ```
-Una vez obtenidos los datos, estos se pasarán a `Container` (componente encargado de mostrarlos) como propiedades.
+Una vez obtenidos los datos, estos se pasarán a `Body` (componente encargado de mostrarlos) como propiedades.
 
-Este es el código de `Home` y de `Container` en este punto del taller: 
+Este es el código de `Home` y de `Body` en este punto del taller: 
 
 * **Home**:
 
@@ -386,3 +386,47 @@ const Body = ({ step, posts }) => {
 
 export default Body;
 ```
+
+Vamos a hacer un componente específico para la visualización de los posts. Cada uno de los post que nos viene de back, tiene esta estructura: 
+
+```
+{
+  username,
+  userImage,
+  postImage,
+  filter,
+  caption,
+  hasBeenLiked,
+  likes
+}
+ ```
+
+así que contando con la info que queremos mostrar, nuestro compoente CardPost, tendrá esta pinta en código:
+
+```js
+import React from 'react';
+
+const CardPost = ({post}) => {
+  return (
+    <article>
+      <div className="user-info">
+      </div>
+      <div>
+    </article>
+  )
+}
+```
+
+Holaa
+## Subida del post: recogiendo la info
+
+### Subida de la imagen
+
+### Eliginedo el mejor filtro: CardFilter y setFilter
+
+### ¿Cómo ser Paulo Coelho y dejar comentarios filosóficos? Solo necesitas un textArea y un setCaption.
+
+### Guardando la info: llamada a la API.
+
+## Likes y dislikes: interaccionando con los post de tus compis.
+
