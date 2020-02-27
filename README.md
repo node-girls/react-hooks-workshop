@@ -438,14 +438,147 @@ No olvidéis que:
 2. El array de posts, le tiene que ser pasado a Body como prop.
 
 ## Subida del post: recogiendo la info
+A continuación vamos a darle duro a la subida del post. Elegiremos una foto, un filtro, escribiremos un comentario inspiracional y lo guardaremos en la BBDD para la posteridad o hasta que reiniciemos back ;P.
 
 ### Subida de la imagen
+Recordemos (que con todo lo que hemos hecho hasta el momento, igual ya ni nos acordamos de qué había en el footer), que en caso de estar en el step 1, habíamos habilitado un input de tipo file. Vamos a manejar la subida de archivos, enlazando el método `handleUpload` (en `Home`) con el evento `onChange` del `input`. Este `hanldeUpload` será el encargado de leer el archivo de la imagen, seter `image` como variable de estado y navegar al siguiente step.
+
+```js
+const handleUpload = (ev) => {
+  const files = ev.target.files
+  if (files.length){
+    const reader = new FileReader();
+    reader.readAsDataUrl(files[0]);
+    reader.onLoad = (ev) => {
+      setImage(ev.target.result);
+      setStep(2);
+    }
+  }
+}
+```
+
+No olvidéis que este método hay que enlazarlo con `Footer` como una propiedad del mismo.
 
 ### Eliginedo el mejor filtro: CardFilter y setFilter
+Vamos a tener una serie de filtros disponibles, para que nuestras fotos sean lo más aparentes posibles y el resto de la humanidad se muera de envidia con esa foto tan original de nuestro pie frente al mar (sí, vamos necesitando y soñando con unas merecidas vacatas ;P).
+
+Además de `components` y `containers`, dentro de `src`, crearemos una carpeta `data`que incluya algo de info necesaria. El primer archivo que incluiremos dentro de las misma será una lista de los filtros que tenemos disponibles. Es el archivo `filter.js` y los filtros son:
+
+```js
+export default [
+  { name: 'normal' },
+  { name: 'clarendon' },
+  { name: 'gingham' },
+  { name: 'moon' },
+  { name: 'lark' },
+  { name: 'reyes' },
+  { name: 'juno' },
+  { name: 'slumber' },
+  { name: 'aden' },
+  { name: 'perpetua' },
+  { name: 'mayfair' },
+  { name: 'rise' },
+  { name: 'hudson' },
+  { name: 'valencia' },
+  { name: 'xpro2' },
+  { name: 'willow' },
+  { name: 'lofi' },
+  { name: 'inkwell' },
+  { name: 'nashville' }
+]
+```
+
+En el step 2, mostraremos un listado de estos, aplicados sobre nuestra imagen. Vamos a crear un componente específico que nos permita hacer esto, se llamará ``CardFilter` y lo vamos a hacer, dentro de la carpeta `components`.
+
+```js
+import React from 'react';
+
+const CardFilter = ({filter, image, setFilter}) => {
+  return (
+  <div className={filter.name}>
+    <p>{filter.name}</p>
+    <div
+      className="img"
+      id={filter.name}
+      onClick={() => setFilter(filter.name)}>
+        <img src={image} alt="" />
+    </div>
+  </div>
+  )
+}
+```
+Al igual que en los CardPosts, el renderizado de los componetes de filtros, será condicional, ya que solo lo vamos a hacer después de haber elegido una imagen (step 2) y se hará desde `Body` através de un `map` de los distintos filtros, estas líneas en nuestro `Body`, serán las responsables de dicho comportamiento:
+
+```js
+import CardFilter from './CardFilter';
+import filters from '../data/filters';
+```
+
+```js
+{ step === 2 
+  && <CardFilter step={step} image={image} setFilter={setFilter}>}
+```
+
+Desde `Home`, filter debe setar establecida como variable de stado, y por tanto, también debemos haber definido setFilter para poder modificar su valor. No vamos a poner aquí el código porque hemos dado ya un montón la turra con las variables de stado y los hooks, os dejamos que le deis un poco al coco... y si a estar altura tenéis fitras las neuronas, podéis encontrar cómo hacerlo, en el código.
 
 ### ¿Cómo ser Paulo Coelho y dejar comentarios filosóficos? Solo necesitas un textArea y un setCaption.
 
+Vengaaaa, chicas, que ya no nos queda ná de ná. Después de haber elegido el filtro más molón, navegaremos a la siguiente pantalla, clickando en el botón `Next` del `Header`, haciendo uso del método `handleNext` que setea el step a su valor más uno.
+
+La última pantalla antes de guardar el post, mostrará la imagen con su filtro aplicado y nos permitirá dejar un comentario filosófico sobre lo hermosa que es la vida (recordemos que esto es IG, no tuiter, así que aquí no caben los haters, somos todo amor, salud y vacatas molonas). De nuevo, vamos a echar mano de un renderizado condicional denro de `Body`:
+
+```js
+{
+  step === 3
+  && 
+  <>
+    <div className="selected-image">
+      <img src={image}>
+    </div>
+    <div clas="caption-container">
+      <textarea 
+        name={}
+        type="text"
+        onChange={(ev) => setCaption(ev.target.value)}
+        placeholder="deja tu reflexión"
+      >
+      </textarea>
+    </div>
+  </>
+}
+```
+
 ### Guardando la info: llamada a la API.
+Y yaaaaaaa casiiiii lo tenemos. Solo nos falta implementar el método `handleShare` que haga la petición de guardado de los datos, vuelva al step 1 y actualice los posts:
+
+```js
+const savePost = async () => {
+  const url = 'localhost:3000/api/posts';
+  const post = {
+    username: 'ngm',
+    userImage: userImage, //imagen guardada dentro de la carpta data
+    hasBeenLiked: false,
+    likes: 0
+    caption,
+    filter,
+    postImage: image,
+  }
+  const config = {
+    method: 'post',
+    url,
+    data: post,
+  }
+  const res = await axios(config);
+}
+
+const handleShare = () => {
+  savePost();
+  setStep(1);
+  setTimeout(() => getPosts());
+}
+```
 
 ## Likes y dislikes: interaccionando con los post de tus compis.
+
+Bueno, bueno, bueno... esto ya... mola!!!! Solo una última cosita y es manejar las interacciones con los posts de nuestras coleguis!!! La variable `hasBeenLiked` es una variable `boolean` que indica si ya le hemos dado `me gusta` a una imagen o no. Así que cuando clickamos en los likes, lo que tenemos que hacer, es comprobar si ya le habíamos dado a me gusta o no, si ya le habíamos dado a me gusta, estaremos haciendo un `dislike` y debemos restarle un like, en caso contrario, debemos sumarselo. Y por supuesto, actualizar nuestros posts en base de datos. Con estas pautas... ¿Os atrevéis a hacer este ejercicio vosotras solas? Recordad que si os atascáis en algo simepre podéis acudir al código final del repo.
 
