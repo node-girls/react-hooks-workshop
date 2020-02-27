@@ -14,17 +14,17 @@ const Home = () => {
   const savePost = async (post) => {
     const config = {
       method: 'post',
-      url:'http://localhost:3000/api/posts',
+      url: 'http://localhost:3000/api/posts',
       data: post
     };
     const res = await axios(config);
     return res;
   }
   const handleGoHome = () => setStep(1);
-  const handleNext = () => setStep(step +1);
+  const handleNext = () => setStep(step + 1);
   const handleUploadImage = (ev) => {
     const files = ev.target.files;
-    if(files.length > 0) {
+    if (files.length > 0) {
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
       reader.onload = ev => {
@@ -39,8 +39,8 @@ const Home = () => {
     const likes = hasBeenLiked ? post.likes + 1 : post.likes - 1;
     const config = {
       method: 'put',
-      url:`http://localhost:3000/api/posts/${post.id}`,
-      data: {hasBeenLiked, likes}
+      url: `http://localhost:3000/api/posts/${post.id}`,
+      data: { hasBeenLiked, likes }
     };
     const res = await axios(config);
     getPosts();
@@ -74,16 +74,16 @@ const Home = () => {
     getPosts();
   }, []);
 
-  return(
+  return (
     <>
-      <h2>Home</h2>
-      <Header 
+      <Header
         step={step}
         handleGoHome={handleGoHome}
         handleNext={handleNext}
-        handleShare={handleShare}  
+        handleShare={handleShare}
       />
-      <Body 
+      <h1>Home</h1>
+      <Body
         step={step}
         posts={posts}
         image={image}
@@ -92,7 +92,7 @@ const Home = () => {
         handleLikes={handleLikes}
       />
       <Footer
-        handleGoHome={handleGoHome} 
+        handleGoHome={handleGoHome}
         step={step}
         handleUploadImage={handleUploadImage}
       />

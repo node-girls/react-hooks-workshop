@@ -32,6 +32,7 @@ img {
 h1 {
   text-align: left;
   font-size: 2rem;
+  margin-left: 1rem;
 }
 
 h2 {
@@ -59,7 +60,7 @@ h2 {
   overflow: scroll;
   display: flex;
   flex-direction: column;
-  width: 20rem;
+  width: 25rem;
 }
 
 /* Buttons */
