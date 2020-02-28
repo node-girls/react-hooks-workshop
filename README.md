@@ -660,3 +660,24 @@ const handleShare = () => {
 
 Bueno, bueno, bueno... esto ya... mola!!!! Solo una última cosita y es manejar las interacciones con los posts de nuestras coleguis!!! La variable `hasBeenLiked` es una variable `boolean` que indica si ya le hemos dado `me gusta` a una imagen o no. Así que cuando clickamos en los likes, lo que tenemos que hacer, es comprobar si ya le habíamos dado a me gusta o no, si ya le habíamos dado a me gusta, estaremos haciendo un `dislike` y debemos restarle un like, en caso contrario, debemos sumarselo. Y por supuesto, actualizar nuestros posts en base de datos. Con estas pautas... ¿Os atrevéis a hacer este ejercicio vosotras solas? Recordad que si os atascáis en algo simepre podéis acudir al código final del repo.
 
+## ¡Enhorabuena! ¡Has completado el taller! :tada:
+
+Esperamos que hayas aprendido mucho y te hayas quedado con ganas de seguir trasteando. :wink: ¡Eso es lo importante!
+
+<p align="center">
+  <img alt="Despedida" width="500" src="https://media.giphy.com/media/26u4exk4zsAqPcq08/giphy.gif">
+</p>
+
+Ahora tienes un mundo abierto de posibilidades: puedes tratar de mejorar tu aplicación, añadir nuevas funcionalidades, seguir estudiando, practicando, ¡lo que tú quieras!
+
+Si quieres seguir ampliando información, recuerda que tienes varios enlaces en las slides para seguir aprendiendo. ¡Pero tómatelo con calma! ¡Ahora toca celebrarlo! :beers:
+
+## ¡Pero esto no termina aquí!
+
+¡No ha hecho más que empezar!
+
+Si tienes cualquier duda o sugerencia, puedes dejarla en un `issue` de este repo, o incluso hacer una `pull request` encuentras algún error o quieres añadir algo. 🤗
+
+<p align="center">
+  <img alt="Despedida" width="500" src="https://media.giphy.com/media/m9eG1qVjvN56H0MXt8/giphy.gif">
+</p>
