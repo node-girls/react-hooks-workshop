@@ -3,7 +3,7 @@ import React from 'react';
 const Footer = ({ step, handleGoHome, handleUploadImage }) => (
   <footer>
     <button onClick={handleGoHome}><img src="/img/home.svg" className="icon" alt="Home" /></button>
-    <div class="upload-btn-wrapper">
+    <div className="upload-btn-wrapper">
       <button><img src="/img/camera.svg" className="icon" alt="Subir imagen" /></button>
       <input
         type="file"

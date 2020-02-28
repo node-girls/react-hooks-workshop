@@ -3,17 +3,19 @@ import CardPosts from './CardPosts';
 import CardFilter from './CardFilters';
 import filters from '../data/filters';
 
-const Body = ({ step, posts, image, setFilter, setCaption, handleLikes }) => (
+const Body = ({ step, posts, image, filter, setFilter, setCaption, handleLikes }) => (
   <main>
     {step === 1
-      && posts.map((post, index) => <CardPosts key={post.id} post={post} handleLikes={handleLikes} />)}
+      && <div className="posts">{posts.map((post, index) => <CardPosts key={post.id} post={post} handleLikes={handleLikes} />)}</div>}
     {step === 2
       && <div className="filter-container">{filters.map((filter => <CardFilter key={filter.name} image={image} filter={filter} setFilter={setFilter} />))}</div>}
     {step === 3
       &&
       <>
         <div className="selected-image">
-          <img src={image} alt="" />
+          <div className={filter}>
+            <img className="img" src={image} alt="" />
+          </div>
         </div>
         <div className="caption-containe">
           <textarea

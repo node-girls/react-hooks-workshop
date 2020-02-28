@@ -1,18 +1,22 @@
 import React from 'react';
 
 const CardPosts = ({ post, handleLikes }) => (
-  <article>
-    <div>
+  <article className="post">
+    <div className="post-user">
       <img src={post.userImage} alt={post.username} />
       <p>{post.username}</p>
     </div>
-    <div>
-      <img src={post.postImage} alt="" />
-      <div>
-        <button onClick={() => handleLikes(post)}>
-          <i className="far fa-heart fa-lg"></i>
-        </button>
-        <p>{post.likes}</p>
+    <div className="post-content">
+      <div className={post.filter}>
+        <img className="img" src={post.postImage} alt="" />
+      </div>
+      <div className="post-info">
+        <div className="post-likes">
+          <button onClick={() => handleLikes(post)}>
+            <span><img src="/img/heart.svg" className={post.hasBeenLiked ? "liked" : "not-liked"}></img></span>
+          </button>
+          <p>{post.likes}</p>
+        </div>
         <p>{post.caption}</p>
       </div>
     </div>
