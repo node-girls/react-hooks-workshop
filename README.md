@@ -8,7 +8,9 @@ Vamos a hacer una app basada (siempre basada, nunca copiada...) en instagram. As
 
 La pinta que esperamos que tenga es esta:
 
-***************Vídeo????
+<p align="center">
+  <img alt="Aplicación NodeGirls" height="600" src="/nodegirls-ig.gif">
+</p>
 
 Con las slides como fondo ya os hemos contado los principales aspectos técnicos de React. Como siempre, la mejor forma de quedarnos con ellos es embarrarnos y cacharrear, así que allá vamos.
 
@@ -43,7 +45,20 @@ Con las slides como fondo ya os hemos contado los principales aspectos técnicos
 
 10. Por último, veremos como manejar los likes y dislikes (por si le damos sin querer me gusta a la foto de ese petardo que nos cae fatal).
 
-## Inicializar el proyecto
+## Inicializar el proyecto y API
+
+Antes de empezar con nuestra aplicación de React, tenemos que levantar un servidor con una API para poder conectarnos a ella, pero que no cunda el pánico!! Irene se ha currado una API muy fácil de usar para que no nos tengamos que preocupar para nada del back. ;)
+
+Así que, en otra instancia de la consola, solo tenemos que ejecutar el siguiente comando:
+
+```
+npx github:IrenePEncinar/express-instagram
+```
+
+Y así podremos acceder desde `localhost:3000`! Volvamos ahora a nuestra aplicación para conectarnos.
+
+Ahora sí, vamos a inicializar el proyecto de React:
+
 1. Instala `create-react-app` con el comando `npx install -g create-react-app`.
 2. Inicializa el proyecto con el comando: `npm create-react-app ig-ngm`.
 3. Cambia a la capeta que contiene el código y abre tu IDE.
@@ -88,6 +103,7 @@ Es decir, vamos a crear una carpeta `img` dentro de `public`. Dentro de esta car
 - [`nodegirls.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/nodegirls.svg)
 - [`right-arrow.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/right-arrow.svg)
 - [`share.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/share.svg)
+- [`heart.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/heart.svg)
 
 > ⚠️ Para no extender más el taller, vamos a tener todo el código CSS en un archivo, pero lo ideal es que el código CSS relativo a cada componente esté en archivos diferentes, y sea cada componente el que importe su archivo CSS. Esta refactorización la puedes hacer después. 😉
 
@@ -127,11 +143,11 @@ import Footer from '../../components/footer/Footer';
 
 const Home = () => {
   return (
-    <div>
+    <>
       <Header/>
       <Body/>
       <Footer/>
-    </div>
+    </>
   )
 }
 
@@ -172,24 +188,20 @@ import React from 'react';
 const Header = ({ step}) => {
   return (
     <>
-      {step ===1 && <button>Home</button>}
-      {(step === 2 || step === 3) && <button>Cancel</button>}
-      {(step ===1 || step === 2) && <button>Next</button>}
-      {step === 3 && <button>Share</button>}
+      {step ===1 && <button><img src="/img/nodegirls.svg" className="icon logo" alt="Home" /></button>}
+      {(step === 2 || step === 3) && <button><img src="/img/nodegirls.svg" className="icon logo" alt="Home" /></button>}
+      {(step ===1 || step === 2) && <button><img src="/img/right-arrow.svg" className="icon" alt="Siguiente" /></button>}
+      {step === 3 && <button><img src="/img/share.svg" className="icon" alt="Enviar" /></button>}
     </>
   );
 };
 
 export default Header;
 ```
-donde:
-
-  * `step`: es el paso del flujo de carga de imágenes.
-  * `hadleGoHome`: es la función que nos va a permitir navegar hasta la primera pantalla.
-  * `handleNextStep`: es la función que nos permitirá navegar hasta a siguiente pantalla.
-  * `handleSharePost`: es una función que navegará a home y lanzará la petición post con los datos.
+Donde `step` es el paso del flujo de carga de imágenes.
 
 ### Footer
+
 Este es el componente que nos va a permitir subir las imágenes. Para ello, incluiremos un botón que permita navegar a la pantalla de inicio y un input para seleccionar el archivo que queremos subir.
 
 ```js
@@ -197,22 +209,24 @@ import React from 'react';
 
 const Footer = ({ step }) => {
   return (
-    <>
-      <button>Home</button>
+	<footer>
+    <button><img src="/img/home.svg" className="icon" alt="Home" /></button>
+    <div className="upload-btn-wrapper">
+      <button><img src="/img/camera.svg" className="icon" alt="Subir imagen" /></button>
       <input
         type="file"
         name="file"
         id="file"
         className="file"
-        disabled={step!==1}
-        />
-    </>
+        disabled={step !== 1} />
+    </div>
+  </footer>
   );
 };
 
 export default Footer;
 ```
-Donde `step` y `handleGoHome` son los mismos elementos definidos para el componente `Header`, `handleUploadImage` va ser la función que suba imágenes y el `input` va a estar deshabilitado en cualquier pantalla que no sea la inicial.
+Igual que en componente anterior, `step` nos permite conocer el paso en el que estamos en el flujo de subir la imagen.
 
 ### Body
 De momento, inicializaremos este componente de una forma muy básica, simplemente vamos a hacer que nos muestre el paso en el que nos encotramos. Así, `Body` nos queda tal que:
@@ -222,9 +236,9 @@ import React from 'react';
 
 const Body = ({ step }) => {
   return (
-    <>
+    <main>
       <h2>Body in step {step} </h2>
-    </>
+    </main>
   );
 };
 
@@ -269,7 +283,7 @@ Hasta el momento, nuestros componentes `Header` y `Footer`, contienen unos boton
 
 > :hand: One minute!!!!! ¿No habíais dicho que `Header`, `Footer` y `Body` eran componentes UI si ninguna lógica? Bingoooo!!!!! :tada: Así es, premio para tí, pequeña padawan por estar atenta. Entonces... ¿Cómo hago para darles ese soplo de vida y espíritu y que esos botones e input sirvan para algo más que para mostrar una interfaz bonita?
 
-Para esos menesteres, vamos a hacer uso de una de las características más molonas de js que es que las funciones son ciudadanos de primera categoría, oiga, nada que envidiarles a sus primos los objetos, strings, numbers ni ningún otro. Y si estos últimos, pueden venir como parámetros de una función otra función no va a ser menos. Así, nuestros _dummy components_ quedarían:
+Para esos menesteres, vamos a hacer uso de una de las características más molonas de JavaScript que es que las funciones son ciudadanos de primera categoría, oiga, nada que envidiarles a sus primos los objetos, strings, numbers ni ningún otro. Y si estos últimos, pueden venir como parámetros de una función otra función no va a ser menos. Así, nuestros _dummy components_ quedarían:
 
 ```js
 const Header = ({ handleGoHome, handleShare, handleNext, step}) => {
@@ -284,22 +298,34 @@ const Header = ({ handleGoHome, handleShare, handleNext, step}) => {
 };
 ```
 
+Donde:
+
+  * `step`: es el paso del flujo de carga de imágenes.
+  * `hadleGoHome`: es la función que nos va a permitir navegar hasta la primera pantalla.
+  * `handleNextStep`: es la función que nos permitirá navegar hasta a siguiente pantalla.
+  * `handleSharePost`: es una función que navegará a home y lanzará la petición post con los datos.
+
 ```js
-const Footer = ({ handleGoHome, handleUploadImage, step }) => {
+const Footer = ({ step, handleGoHome, handleUploadImage }) => {
   return (
-    <>
-      <button onClick={handleGoHome}>Home</button>
-      <input
-        type="file"
-        name="file"
-        id="file"
-        className="file"
-        disabled={step!==1}
-        onChange={handleUploadImage}/>
-    </>
+    <footer>
+    	<button onClick={handleGoHome}><img src="/img/home.svg" className="icon" alt="Home" /></button>
+    	<div className="upload-btn-wrapper">
+      	<button><img src="/img/camera.svg" className="icon" alt="Subir imagen" /></button>
+      	<input
+          type="file"
+          name="file"
+          id="file"
+          className="file"
+          disabled={step !== 1}
+          onChange={handleUploadImage} />
+    	</div>
+  	</footer>
   );
 };
 ```
+
+Donde `step` y `handleGoHome` son los mismos elementos definidos para el componente `Header`, `handleUploadImage` va ser la función que suba imágenes y el `input` va a estar deshabilitado en cualquier pantalla que no sea la inicial.
 
 Por supuesto, estas funciones habrán de venir definidas en algún lado. La lógica la definimos dentro de los _containers_. Nosotras, hoy solo tenemos un _container_, `Home`, en el que definiremos lo que queremos que haga cada una de estas funciones:
 
@@ -316,7 +342,7 @@ const Home = () => {
   const handleShare = () => {};
   const handleUploadImage = () => {};
   return (
-    <div>
+    <>
       <Header
         step={step}
         handleShare={handleShare}
@@ -331,7 +357,7 @@ const Home = () => {
         handleGoHome={handleGoHome}
         handleUploadImage={handleUploadImage}
       />
-    </div>
+    </>
   )
 }
 
@@ -344,19 +370,9 @@ Hasta el momento, tenemos una app que nos permite navegar entre pantallas, y cam
 
 > :warning: **Warning!!!!** La carga inicial de los posts es un poco compleja!!!! Keep your eyes :eyes: and ears :ear: open!!!
 
-Antes de empezar con la carga inicial de los posts, tenemos que levantar un servidor con una API para poder conectarnos a ella, pero que no cunda el pánico!! Irene se ha currado una API muy fácil de usar para que no nos tengamos que preocupar para nada del back. ;)
-
-Así que, en otra instancia de la consola, solo tenemos que ejecutar el siguiente comando:
-
-```
-npx github:IrenePEncinar/express-instagram
-```
-
-Y así podremos acceder desde `localhost:3000`! Volvamos ahora a nuestra aplicación para conectarnos.
-
 El componente `Body` será el que nos muestre el contenido de los post de nuestro IG. Por ello, como medida inicial lo primero que haremos, será la carga de los mismos.
 
-Posts es una variable que pasaremos como propiedad al componente Body. Puesto que nos interesa que cada vez que `post` varíe su valor, `Body` se actualice, hemos de establecerla como parte del estado de` Home`. Esto lo hacemos de manera análoga a como hacíamos con `step`.
+Posts es una variable que pasaremos como propiedad al componente Body. Puesto que nos interesa que cada vez que `posts` varíe su valor, `Body` se actualice, hemos de establecerla como parte del estado de` Home`. Esto lo hacemos de manera análoga a como hacíamos con `step`.
 ```js
 const [posts, setPosts] = useState([]); 
 ```
@@ -365,11 +381,11 @@ Por otra parte hemos de incluir la petición a back. Vamos a separar este proces
 1. **instalación del módulo de node axios** que nos va a facilitar realizar y procesar las peticiones: 
 ``` npm i -S axios ```
 2. **Importaremos el módulo** axios en `Home`:
-``` import axios from 'axios ```
+``` import axios from 'axios' ```
 3. Queremos que la petición se realice la primera vez que se "monta" nuestro componente, para ello usaremos el _hook_ `useEffect`, al que le pasaremos como dependencia un array vacío. El hecho de que no tenga dependencias, evita que entremos en un bucle infinito:
 ```js
   const getPosts = async () => {
-    const res = await axios.get('http;//localhost:3000/api/posts');
+    const res = await axios.get('http://localhost:3000/api/posts');
     setPosts(res.data);
   } 
   useEffect(() => {
@@ -404,7 +420,7 @@ const Home = () => {
     getPosts();
   }, []);
   return (
-    <div>
+    <>
       <Header
         step={step}
         handleShare={handleShare}
@@ -420,7 +436,7 @@ const Home = () => {
         handleGoHome={handleGoHome}
         handleUploadImage={handleUploadImage}
       />
-    </div>
+    </>
   )
 }
 
@@ -433,9 +449,9 @@ import React from 'react';
 
 const Body = ({ step, posts }) => {
   return (
-    <>
+    <main>
       <h2>Body in step {step} </h2>
-    </>
+    </main>
   );
 };
 
@@ -463,21 +479,25 @@ import React from 'react';
 
 const CardPost = ({post}) => {
   return (
-    <article>
-    <div>
-      <img src={post.userImage} alt={post.username}/>
-      <p>{post.username}</p>
-    </div>
-    <div>
-      <img src={post.postImage} alt=""/>
-      <div>
-        <button onClick={() => handleLikes(post)}> 
-          <i className="far fa-heart fa-lg"></i>
-        </button>
-        <p>{post.likes}</p>
-        <p>{post.caption}</p>
+    <article className="post">
+      <div className="post-user">
+        <img src={post.userImage} alt={post.username}/>
+        <p>{post.username}</p>
       </div>
-    </div>
+      <div className="post-content">
+        <div className={post.filter}>
+          <img className="img" src={post.postImage} alt="" />
+        </div>
+        <div className="post-info">
+          <div className="post-likes">
+            <button onClick={() => handleLikes(post)}> 
+              <span><img src="/img/heart.svg" className={post.hasBeenLiked ? "liked" : "not-liked"}></img></span>
+            </button>
+            <p>{post.likes}</p>
+          </div>
+          <p>{post.caption}</p>
+        </div>
+      </div>
     </article>
   )
 }
@@ -489,8 +509,8 @@ Ahora vamos a ver un poquito de la magia de react (bueno, después de los hooks,
     && posts.map((post, index) => <CardPosts key={post.id} post={post}/>)}
 ```
 No olvidéis que:
-1. Body debe importar CardPost o no podrá utilizarlo.
-2. El array de posts, le tiene que ser pasado a Body como prop.
+1. `Body` debe importar `CardPost` o no podrá utilizarlo.
+2. El _array_ de posts, le tiene que ser pasado a `Body` como _prop_.
 
 ## Subida del post: recogiendo la info
 A continuación vamos a darle duro a la subida del post. Elegiremos una foto, un filtro, escribiremos un comentario inspiracional y lo guardaremos en la BBDD para la posteridad o hasta que reiniciemos back ;P.
@@ -570,8 +590,8 @@ import filters from '../data/filters';
 ```
 
 ```js
-{ step === 2 
-  && <CardFilter step={step} image={image} setFilter={setFilter}>}
+{step === 2
+      && <div className="filter-container">{filters.map((filter => <CardFilter key={filter.name} image={image} filter={filter} setFilter={setFilter} />))}</div>}
 ```
 
 Desde `Home`, filter debe setar establecida como variable de stado, y por tanto, también debemos haber definido setFilter para poder modificar su valor. No vamos a poner aquí el código porque hemos dado ya un montón la turra con las variables de stado y los hooks, os dejamos que le deis un poco al coco... y si a estar altura tenéis fitras las neuronas, podéis encontrar cómo hacerlo, en el código.
@@ -588,14 +608,17 @@ La última pantalla antes de guardar el post, mostrará la imagen con su filtro 
   && 
   <>
     <div className="selected-image">
-      <img src={image}>
+      <div className={filter}>
+        <img className="img" src={image} alt="" />
+			</div>
     </div>
     <div clas="caption-container">
       <textarea 
+  			className="caption-input"
         name={}
         type="text"
         onChange={(ev) => setCaption(ev.target.value)}
-        placeholder="deja tu reflexión"
+        placeholder="Write a caption..."
       >
       </textarea>
     </div>
