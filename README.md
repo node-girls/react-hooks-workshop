@@ -521,7 +521,7 @@ const handleUpload = (ev) => {
   const files = ev.target.files
   if (files.length){
     const reader = new FileReader();
-    reader.readAsDataUrl(files[0]);
+    reader.readAsDataURL(files[0]);
     reader.onload = (ev) => {
       setImage(ev.target.result);
       setStep(2);
