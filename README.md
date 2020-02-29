@@ -59,11 +59,9 @@ Y así podremos acceder desde `localhost:3000`! Volvamos ahora a nuestra aplicac
 
 Ahora sí, vamos a inicializar el proyecto de React:
 
-1. Instala `create-react-app` con el comando `npx install -g create-react-app`.
-2. Inicializa el proyecto con el comando: `npm create-react-app ig-ngm`.
+1. Instala `create-react-app` con el comando `npm install -g create-react-app`.
+2. Inicializa el proyecto con el comando: `create-react-app ig-ngm`.
 3. Cambia a la capeta que contiene el código y abre tu IDE.
-
-> :warning: **¿Tienes algún problema con Git/Node y no puedes seguir estos pasos?** ¡No te preocupes! Hemos creado este repo de [Codesandbox](https://codesandbox.io/s/create-react-app-0q9nn?fontsize=14) para que no te pierdas nada del taller. Así puedes seguirlo, y cuando termine vemos cómo podemos arreglar esos problemas. :wink:
 
 ## Arquitectura del proyecto
 Como vemos `create-react-app` nos ha creado una estructura básica del proyecto. La magia la vamos a hacer dentro de la capeta `src` y vamos a dividir nuestro código entre los componentes de UI o _dummies_ y los compoenents que se responsabilizan de las 
