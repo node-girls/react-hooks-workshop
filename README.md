@@ -98,12 +98,12 @@ public/
 Es decir, vamos a crear una carpeta `img` dentro de `public`. Dentro de esta carpeta añadiremos los siguientes iconos (abre cada enlace para copiar su contenido):
 
 - [`camera.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/camera.svg)
+- [`heart.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/heart.svg)
 - [`home.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/home.svg)
 - [`left-arrow.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/left-arrow.svg)
 - [`nodegirls.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/nodegirls.svg)
 - [`right-arrow.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/right-arrow.svg)
 - [`share.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/share.svg)
-- [`heart.svg`](https://raw.githubusercontent.com/Maritxis/ig-ngm-pruebas/master/public/img/heart.svg)
 
 > ⚠️ Para no extender más el taller, vamos a tener todo el código CSS en un archivo, pero lo ideal es que el código CSS relativo a cada componente esté en archivos diferentes, y sea cada componente el que importe su archivo CSS. Esta refactorización la puedes hacer después. 😉
 
@@ -136,10 +136,10 @@ Este paso lo repetiremos para cada uno de los componentes con sus correspondient
 Como inicialmente queremos saber que están ahí, podéis darle un poco de contenido, un `button` un `header` o cualquier cosa que os apetezca. __Any way__, si levantamos la aplicación (por si alguien ha olvidado el comando __menos utilizado__ en la historia: ```npm start```), todavía no vamos a ver nada, __niente__, __nothing de nothing__... y ¿porqueéééééé? pues sencillamente, porque no hay nadie que haga uso de estos componentes. Creemos pues `Home` el elemento __Body__ e incluyamos nuestros __dummies__ pero __loved__, components.
 
 ```js
-import react from 'React';
-import Header from '../../components/header/Header';
-import Body from '../../components/Body/Body';
-import Footer from '../../components/footer/Footer';
+import React from 'react';
+import Header from '../components/Header';
+import Body from '../components/Body';
+import Footer from '../components/Footer';
 
 const Home = () => {
   return (
@@ -158,7 +158,7 @@ A su vez, este tendremos que llamarlo desde App para que sea visible:
 
 ```js
 import React from 'react';
-import Home from './containers/home/Home';
+import Home from './containers/Home';
 import './App.css';
 
 function App() {
@@ -187,12 +187,12 @@ import React from 'react';
 
 const Header = ({ step}) => {
   return (
-    <>
+    <header>
       {step ===1 && <button><img src="/img/nodegirls.svg" className="icon logo" alt="Home" /></button>}
       {(step === 2 || step === 3) && <button><img src="/img/nodegirls.svg" className="icon logo" alt="Home" /></button>}
       {(step ===1 || step === 2) && <button><img src="/img/right-arrow.svg" className="icon" alt="Siguiente" /></button>}
       {step === 3 && <button><img src="/img/share.svg" className="icon" alt="Enviar" /></button>}
-    </>
+    </header>
   );
 };
 
@@ -253,15 +253,15 @@ Bueno, el motivo no es especialmente sencillo, vamos a intentar explicarlo aquí
 Dicho lo cual, veamos cómo se traduce esto en código: necesitamos utilizar el método `useState` de React. Este método nos devuelve un array con dos valores, el primero, el de nuestra variable de estado y el segundo, el de la función que hemos de invocar cada vez que necesitemos mutar dicha variable, en otras palabras: 
 
 ```js
-import react, { useState } from 'React';
-import Header from '../../components/header/Header';
-import Body from '../../components/Body/Body';
-import Footer from '../../components/footer/Footer';
+import React, { useState } from 'react';
+import Header from '../components/Header';
+import Body from '../components/Body';
+import Footer from '../components/Footer';
 
 const Home = () => {
   const [step, setStep] = useState(1);
   return (
-    <div>
+    <>
       <Header
         step={step}
       />
@@ -271,7 +271,7 @@ const Home = () => {
       <Footer
         step={step}
       />
-    </div>
+    </>
   )
 }
 
@@ -286,14 +286,14 @@ Hasta el momento, nuestros componentes `Header` y `Footer`, contienen unos boton
 Para esos menesteres, vamos a hacer uso de una de las características más molonas de JavaScript que es que las funciones son ciudadanos de primera categoría, oiga, nada que envidiarles a sus primos los objetos, strings, numbers ni ningún otro. Y si estos últimos, pueden venir como parámetros de una función otra función no va a ser menos. Así, nuestros _dummy components_ quedarían:
 
 ```js
-const Header = ({ handleGoHome, handleShare, handleNext, step}) => {
+const Header = ({ step, handleGoHome, handleShare, handleNext }) => {
   return (
-    <>
-      {step ===1 && <button onClikc={handleGoHome}>Home</button>}
-      {(step === 2 || step === 3) && <button onClick={handleGoHome}>Cancel</button>}
-      {(step ===1 || step === 2) && <button onClick={handleNext}>Next</button>}
-      {step === 3 && <button onClick={handleShare}>Share</button>}
-    </>
+    <header>
+      {step ===1 && <button onClikc={handleGoHome}><img src="/img/nodegirls.svg" className="icon logo" alt="Home" /></button>}
+      {(step === 2 || step === 3) && <button onClick={handleGoHome}><img src="/img/nodegirls.svg" className="icon logo" alt="Home" /></button>}
+      {(step ===1 || step === 2) && <button onClick={handleNext}><img src="/img/right-arrow.svg" className="icon" alt="Siguiente" /></button>}
+      {step === 3 && <button onClick={handleShare}><img src="/img/share.svg" className="icon" alt="Enviar" /></button>}
+    </header>
   );
 };
 ```
@@ -330,15 +330,15 @@ Donde `step` y `handleGoHome` son los mismos elementos definidos para el compone
 Por supuesto, estas funciones habrán de venir definidas en algún lado. La lógica la definimos dentro de los _containers_. Nosotras, hoy solo tenemos un _container_, `Home`, en el que definiremos lo que queremos que haga cada una de estas funciones:
 
 ```js
-import react, { useState } from 'React';
-import Header from '../../components/header/Header';
-import Body from '../../components/Body/Body';
-import Footer from '../../components/footer/Footer';
+import React, { useState } from 'react';
+import Header from '../components/Header';
+import Body from '../components/Body';
+import Footer from '../components/Footer';
 
 const Home = () => {
   const [step, setStep] = useState(1);
-  const handleGoHome = () => setState(1);
-  const handleNext = () => setState(step + 1);
+  const handleGoHome = () => setStep(1);
+  const handleNext = () => setStep(step + 1);
   const handleShare = () => {};
   const handleUploadImage = () => {};
   return (
@@ -399,11 +399,11 @@ Este es el código de `Home` y de `Body` en este punto del taller:
 * **Home**:
 
 ```js
-import react, { useState } from 'React';
+import React, { useState } from 'react';
 import axios from 'axios';
-import Header from '../../components/Header';
-import Body from '../../components/Body';
-import Footer from '../../components/Footer';
+import Header from '../components/Header';
+import Body from '../components/Body';
+import Footer from '../components/Footer';
 
 const Home = () => {
   const [step, setStep] = useState(1);
@@ -413,7 +413,7 @@ const Home = () => {
   const handleShare = () => {};
   const handleUploadImage = () => {};
   const getPosts = async () => {
-    const res = await axios.get('http;//localhost:3000/api/posts');
+    const res = await axios.get('http://localhost:3000/api/posts');
     setPosts(res.data);
   } 
   useEffect(() => {
@@ -506,7 +506,7 @@ Ahora vamos a ver un poquito de la magia de react (bueno, después de los hooks,
 
 ```js
   { step === 1 
-    && posts.map((post, index) => <CardPosts key={post.id} post={post}/>)}
+    && <div className="posts">posts.map((post, index) => <CardPosts key={post.id} post={post}/>)</div>}
 ```
 No olvidéis que:
 1. `Body` debe importar `CardPost` o no podrá utilizarlo.
